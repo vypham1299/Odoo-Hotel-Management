@@ -1,0 +1,110 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record id="room_2_view_tree" model="ir.ui.view">
+      <field name="name">List Room</field>
+      <field name="model">room</field>
+      <field name="inherit_id" ref="hotel_management.room_view_tree"/>
+      <field name="arch" type="xml">
+        <!-- Add a new field to the group -->
+        <xpath expr="//field[@name='price_per_night']" position="after">
+            <field name="room_size"/>
+        </xpath>
+
+        <xpath expr="//field[@name='bed_type']" position="before">
+            <field name="smoking"/>
+        </xpath>
+
+        <!-- Modify the rooms tree view -->
+        <xpath expr="//field[@name='price_per_night']" position="replace">
+            <field name="capacity"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="room_view_form" model="ir.ui.view">
+      <field name="name">Form Room</field>
+      <field name="model">room</field>
+      <field name="inherit_id" ref="hotel_management.room_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='is_available']" position="after">
+          <field name="capacity"/>
+          <field name="smoking"/>
+          <field name="room_size"/>
+        </xpath>
+        <xpath expr="//sheet" position="inside">
+            <group><field name="booking_ids"><tree>
+              <field name="booking_id"/>
+              <field name="customer"/>
+              <field name="check_in"/>
+              <field name="check_out"/>
+              <field name="is_booked"/>
+            </tree></field></group>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="hotel_2_view_form" model="ir.ui.view">
+      <field name="name">Form Hotel</field>
+      <field name="model">hotel</field>
+      <field name="inherit_id" ref="hotel_management.hotel_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//sheet" position="inside">
+          <group><field name="booking_ids" string="History Booking"><tree>
+          <field name="booking_id"/>
+          <field name="customer"/>
+          <field name="hotel_id" />
+          <field name="room_id"/>
+          <field name="check_in"/>
+          <field name="check_out"/>
+          </tree></field></group>
+        </xpath>
+      </field>
+    </record>
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="action_room_view_tree">
+      <field name="name">List room</field>
+      <field name="res_model">room</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- <record model="ir.actions.act_window" id="action_order_view_tree">
+      <field name="name">List order</field>
+      <field name="res_model">order.2</field>
+      <field name="view_mode">tree,form</field>
+    </record> -->
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="hotel_management.action_server">
+      <field name="name">hotel_management server</field>
+      <field name="model_id" ref="model_hotel_management_hotel_management"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+
+    <menuitem name="Hotel Management 2" id="hotel_management_root"/>
+
+    <!-- menu categories -->
+    <menuitem name="Rooms" id="menu_open_room_view_tree" parent="hotel_management_root" action="action_room_view_tree"/>
+    <!-- actions -->
+
+    <!-- <menuitem name="List" id="menu_open_hotel_view_tree_1" parent="menu_open_hotel_view_tree"
+              action="action_hotel_view_tree"/> -->
+    <!-- <menuitem name="Server to list" id="hotel_management" parent="hotel_management.menu_2"
+              action="hotel_management.action_server"/> -->
+
+  </data>
+</odoo>

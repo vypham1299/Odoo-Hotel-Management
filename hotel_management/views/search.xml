@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_room_search" model="ir.ui.view">
+        <field name="name">room.search</field>
+        <field name="model">room</field>
+        <field name="arch" type="xml">
+            <search string="Search Rooms">
+                <!-- Filters -->
+                <field name="room_id" filter_domain="[('room_id','ilike',self)]" string="Room ID"/>
+                <field name="hotel_id" filter_domain="[('hotel_id','ilike',self)]" string="Hotel ID"/>
+                <filter name="is_available" string="Available Rooms" domain="[('is_available', '=', True)]"/>
+                <filter name="is_available" string="Occupied Rooms" domain="[('is_available', '=', False)]"/>
+            
+                <!-- Group by -->
+                <group expand="1" string="Group By">
+                    <filter name="bed_type" string="Bed Type" context="{'group_by':'bed_type'}"/>
+                    <filter name="is_available" string="Available" context="{'group_by': 'is_available'}" />
+                    <filter name="hotel_id" string="Hotel" context="{'group_by': 'hotel_id'}" />
+                </group>
+                
+                <!-- Search fields -->
+                <searchpanel>
+                  <field name="bed_type" icon="fa-solid fa-bed" limit="0"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hotel_search" model="ir.ui.view">
+        <field name="name">hotel.search</field>
+        <field name="model">hotel</field>
+        <field name="arch" type="xml">
+            <search string="Search Hotels">
+                <!-- Filters -->
+                <field name="hotel_id" filter_domain="[('hotel_id','ilike',self)]" string="Hotel ID"/>           
+                <field name="address" filter_domain="[('address','ilike',self)]" string="Address"/>           
+            </search>
+        </field>
+    </record>
+
+    <record id="view_booking_search" model="ir.ui.view">
+        <field name="name">booking.search</field>
+        <field name="model">booking</field>
+        <field name="arch" type="xml">
+            <search string="Search Bookings">
+                <!-- Filters -->
+                <field name="booking_id" filter_domain="[('booking_id','ilike',self)]" string="booking ID"/>
+                <filter name="is_approved_booked" string="Approved Booking" domain="[('is_booked', '=', 'booked')]"/>
+                <filter name="is_waiting_booked" string="Waiting Booking" domain="[('is_booked', '=', 'new')]"/>
+
+                <!-- Group by -->
+                <group expand="1" string="Group By">
+                    <filter name="bed_type" string="Bed Type" context="{'group_by':'bed_type'}"/>
+                    <filter name="is_booked" string="booked" context="{'group_by': 'is_booked'}" />
+                    <filter name="hotel_id" string="Hotel" context="{'group_by': 'hotel_id'}" />
+                </group>                
+            </search>
+        </field>
+    </record>
+
+    <record id="hotel_service_view_search" model="ir.ui.view">
+        <field name="name">hotel.service.view.search</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <search string="Search Services">
+                <filter name="hotel_service" string="Hotel Service" domain="[('type','=','service'),('hotel_id','!=',False)]"/>
+            </search>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,161 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record id="hotel_sale_service_view_tree" model="ir.ui.view">
+      <field name="name">Hotel Sale Services</field>
+      <field name="model">sale.order</field>
+      <field name="arch" type="xml">
+        <tree string="Hotel Quotation">
+            <field name="name" string="Number"/>
+            <field name="create_date" string="Creation Date"/>
+            <field name="booking_id"/>
+            <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+            <field name="amount_total" sum="Total Tax Included" widget="monetary" decoration-bf="1"/>
+            <field name="state" decoration-success="state == 'sale' or state == 'done'" decoration-info="state == 'draft' or state == 'sent'" widget="badge"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="hotel_sale_service_view_form" model="ir.ui.view">
+      <field name="name">Hotel Sale Services</field>
+      <field name="model">sale.order</field>
+      <field name="arch" type="xml">
+        <form>
+        </form>
+      </field>
+    </record>
+
+    <record id="hotel_invoice_view_tree" model="ir.ui.view">
+      <field name="name">List Hotel Invoice</field>
+      <field name="model">account.move</field>
+      <field name="arch" type="xml">
+        <tree string="Invoices" js_class="account_tree" decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" expand="context.get('expand', False)" sample="1">
+          <field name="made_sequence_hole" modifiers="{&quot;readonly&quot;: true, &quot;column_invisible&quot;: true}"/>
+          <field name="name" decoration-bf="1" decoration-danger="made_sequence_hole" on_change="1"/>
+          <field name="invoice_partner_display_name" string="Vendor" modifiers="{&quot;readonly&quot;: true, &quot;column_invisible&quot;: true}"/>
+          <field name="invoice_partner_display_name" string="Customer" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="invoice_date" optional="show" string="Bill Date" on_change="1" modifiers="{&quot;readonly&quot;: [[&quot;state&quot;, &quot;not in&quot;, [&quot;draft&quot;]]], &quot;column_invisible&quot;: true}"/>
+          <field name="invoice_date" optional="show" string="Invoice Date" on_change="1" modifiers="{&quot;readonly&quot;: [[&quot;state&quot;, &quot;not in&quot;, [&quot;draft&quot;]]]}"/>
+          <field name="date" optional="hide" string="Accounting Date" on_change="1" modifiers="{&quot;readonly&quot;: [[&quot;state&quot;, &quot;in&quot;, [&quot;posted&quot;, &quot;cancel&quot;]]], &quot;required&quot;: true}"/>
+          <field name="invoice_date_due" widget="remaining_days" optional="show" on_change="1" modifiers="{&quot;invisible&quot;: [[&quot;payment_state&quot;, &quot;in&quot;, [&quot;paid&quot;, &quot;in_payment&quot;, &quot;reversed&quot;]]]}"/>
+          <field name="invoice_origin" optional="hide" string="Source Document" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="payment_reference" optional="hide" modifiers="{&quot;column_invisible&quot;: true}"/>
+          <field name="ref" optional="hide"/>
+          <field name="invoice_user_id" optional="hide" string="Salesperson" widget="many2one_avatar_user" on_change="1"/>
+      <field name="team_id" optional="hide"/>
+          <field name="activity_ids" widget="list_activity" optional="show"/>
+          <field name="company_id" options="{'no_create': True}" optional="hide" on_change="1"/>
+          <field name="amount_untaxed_signed" string="Tax Excluded" sum="Total" optional="show" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="amount_tax_signed" string="Tax" sum="Total" optional="hide" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="amount_total_signed" string="Total" sum="Total" decoration-bf="1" optional="show" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="amount_total_in_currency_signed" string="Total in Currency" optional="show" on_change="1" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="amount_residual_signed" string="Amount Due" sum="Amount Due" optional="hide" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="currency_id" optional="hide" string="Invoice Currency" on_change="1" modifiers="{&quot;readonly&quot;: [[&quot;state&quot;, &quot;in&quot;, [&quot;posted&quot;, &quot;cancel&quot;]]], &quot;required&quot;: true}"/>
+          <field name="company_currency_id" modifiers="{&quot;readonly&quot;: true, &quot;column_invisible&quot;: true}"/>
+          <field name="to_check" optional="hide" widget="boolean_toggle"/>
+          <field name="payment_state" widget="badge" decoration-danger="payment_state == 'not_paid'" decoration-warning="payment_state in ('partial', 'in_payment')" decoration-success="payment_state in ('paid', 'reversed')" optional="show" modifiers="{&quot;invisible&quot;: [[&quot;payment_state&quot;, &quot;in&quot;, &quot;invoicing_legacy&quot;]], &quot;readonly&quot;: true}"/>
+          <field name="edi_state" optional="hide" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="edi_blocking_level" optional="hide" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="edi_error_message" optional="hide" modifiers="{&quot;readonly&quot;: true}"/>
+          <field name="state" widget="badge" decoration-success="state == 'posted'" decoration-info="state == 'draft'" optional="show" on_change="1" modifiers="{&quot;readonly&quot;: true, &quot;required&quot;: true}"/>
+          <field name="move_type" on_change="1" modifiers="{&quot;readonly&quot;: true, &quot;required&quot;: true, &quot;column_invisible&quot;: true}"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="hotel_invoice_view_form" model="ir.ui.view">
+        <field name="name">Form Hotel Invoice</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+        <form>
+        <sheet>
+        <group>
+          <group id="header_left_group">
+
+              <field name="hotel_customer"/>
+
+          </group>
+          <group id="header_right_group">
+
+              <!-- Invoice date (only invoices / receipts) -->
+              <label for="invoice_date" string="Bill Date" style="font-weight:bold;"/>
+              <field name="invoice_date" nolabel="1" options="{'datepicker': {'warn_future': true}}"/>
+
+              <field name="payment_reference"/>
+          </group>
+        </group>
+        </sheet>
+        </form>
+        </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+    <record id="action_hotel_sale_service" model="ir.actions.act_window">
+        <field name="name">Hotel Sale Service</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hotel_sale_service_view_tree" />
+    </record>
+
+    <record id="action_hotel_sale_service_view_tree" model="ir.actions.act_window.view">
+        <field name="view_mode">tree</field>
+        <field name="sequence">1</field>
+        <field name="view_id" ref="hotel_sale_service_view_tree"/>
+        <field name="act_window_id" ref="action_hotel_sale_service"/>
+    </record>
+
+    <record id="action_hotel_sale_service_view_form" model="ir.actions.act_window.view">
+        <field name="view_mode">form</field>
+        <field name="sequence">2</field>
+        <field name="view_id" ref="hotel_sale_service_view_form"/>
+        <field name="act_window_id" ref="action_hotel_sale_service"/>
+    </record>
+
+    <record id="action_hotel_invoices" model="ir.actions.act_window">
+        <field name="name">Hotel Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hotel_invoice_view_tree" />
+        <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+        <field name="context">{'default_move_type': 'out_invoice'}</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="hotel_management_invoice.action_server">
+      <field name="name">hotel_management_invoice server</field>
+      <field name="model_id" ref="model_hotel_management_invoice_hotel_management_invoice"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="hotel_management_invoice" id="hotel_management_invoice.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="hotel_management_invoice.menu_1" parent="hotel_management_invoice.menu_root"/>
+    <menuitem name="Menu 2" id="hotel_management_invoice.menu_2" parent="hotel_management_invoice.menu_root"/>
+-->
+    <!-- actions -->
+    <menuitem id="menu_open_hotel_sale_service_tree" 
+              name="Sale Service" 
+              parent="hotel_management.hotel_management_root" 
+              action="action_hotel_sale_service" />
+
+    <menuitem id="menu_open_hotel_view_tree" 
+              name="Hotel Invoices" 
+              parent="hotel_management.hotel_management_root" 
+              action="action_hotel_invoices" />
+  </data>
+</odoo>

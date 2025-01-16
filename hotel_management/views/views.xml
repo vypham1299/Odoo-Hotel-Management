@@ -1,0 +1,293 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="hotel_view_tree">
+      <field name="name">List Hotel</field>
+      <field name="model">hotel</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="hotel_id"/>
+          <field name="address"/>
+          <field name="manager_id"/>
+          <field name="rooms"/>
+          <field name="available_rooms" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="hotel_view_form" model="ir.ui.view">
+      <field name="name">Form Hotel</field>
+      <field name="model">hotel</field>
+      <field name="arch" type="xml">
+        <form><sheet string="List hotels">
+        <group>
+          <group>
+            <field name="hotel_id"/>
+            <field name="floors"/>
+            <field name="manager_id"/>
+          </group>
+          <group>
+            <field name="address"/>
+            <field name="rooms"/>
+          </group>
+          <field name="employee_ids"/>
+        </group>
+        </sheet></form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="room_view_tree">
+      <field name="name">List Room</field>
+      <field name="model">room</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="room_id"/>
+          <field name="bed_type"/>
+          <field name="price_per_night"/>
+          <field name="is_available"/>
+          <field name="latest_booked"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="room_view_form" model="ir.ui.view">
+      <field name="name">Form Room</field>
+      <field name="model">room</field>
+      <field name="arch" type="xml">
+        <form><sheet string="Extension Room">
+          <group>
+            <group>
+              <field name="room_id"/>
+              <field name="price_per_night"/>
+              <field name="hotel_id" can_create="true" can_write="true"/>
+            </group>
+            <group>
+              <field name="bed_type"/>
+              <field name="is_available"/>
+              <field name="latest_booked" />
+            </group>
+          </group>
+        </sheet></form>
+      </field>
+    </record>
+
+    <record id="booking_view_tree" model="ir.ui.view">
+      <field name="name">List Booking</field>
+      <field name="model">booking</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="booking_id"/>
+          <field name="customer"/>
+          <field name="check_in"/>
+          <field name="check_out"/>
+          <field name="is_booked"/>
+          <field name="create_uid"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="booking_view_form" model="ir.ui.view">
+      <field name="name">Form Booking</field>
+      <field name="model">booking</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+          <group>
+            <group>
+              <field name="booking_id"/>
+              <field name="customer"/>
+              <field name="hotel_id"/>
+              <field name="bed_type"/>
+            </group>
+            <group>
+              <field name="hotel_address"/>
+              <field name="room_id"/>
+              <field name="check_in"/>
+              <field name="check_out"/>
+              <field name="is_booked"/>
+              <button name="is_booked_change" type="object" string="Confirm"/>
+            </group>
+          </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="employee_view_tree" model="ir.ui.view">
+      <field name="name">List Employee</field>
+      <field name="model">hr.employee</field>
+      <field name="arch" type="xml">
+        <tree string="List Employee">
+          <field name="name"/>
+          <field name="hotel_id" />
+          <field name="hotel_manage_ids" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="employee_view_tree" model="ir.ui.view">
+      <field name="name">List Employee</field>
+      <field name="model">hr.employee</field>
+      <field name="arch" type="xml">
+        <tree string="List Employee">
+          <field name="name"/>
+          <field name="hotel_id" />
+          <field name="hotel_manage_ids" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="employee_view_form" model="ir.ui.view">
+      <field name="name">Form Employee</field>
+      <field name="model">hr.employee</field>
+      <field name="arch" type="xml">
+        <form string="Form Employee">
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="company_id" />
+              <field name="parent_id" />
+              <field name="hotel_id" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="new_booking_view_tree" model="ir.ui.view">
+      <field name="name">List New Booking</field>
+      <field name="model">booking</field>
+      <field name="arch" type="xml">
+        <tree string="List New Booking">
+          <field name="booking_id"/>
+          <field name="customer"/>
+          <field name="check_in"/>
+          <field name="check_out"/>
+          <field name="create_uid"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="hotel_service_view_form" model="ir.ui.view">
+      <field name="name">Hotel Services Form</field>
+      <field name="model">product.template</field>
+      <field name="arch" type="xml">
+        <form string="Hotel Services Form">
+          <sheet>
+            <group>
+              <field name="detailed_type"/>
+              <field name="hotel_id" />
+              <field name="name" />
+              <field name="list_price"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="hotel_service_view_tree" model="ir.ui.view">
+      <field name="name">List Hotel Services</field>
+      <field name="model">product.template</field>
+      <field name="arch" type="xml">
+        <tree string="Product" multi_edit="1" sample="1">
+          <field name="hotel_id"/>
+          <field name="name" string="Service Name"/>
+          <field name="list_price" string="Sales Price" widget="monetary" options="{'currency_field': 'currency_id'}" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="action_hotel_view_tree">
+      <field name="name">List Hotel</field>
+      <field name="res_model">hotel</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_room_view_tree">
+      <field name="name">List Room</field>
+      <field name="res_model">room</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_booking_view_tree">
+      <field name="name">List Booking</field>
+      <field name="res_model">booking</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_new_booking_view_tree" model="ir.actions.act_window">
+      <field name="name">List New Booking</field>
+      <field name="res_model">booking</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="new_booking_view_tree"/>
+      <field name="context">{'search_default_is_waiting_booked': 1}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_employee_view_tree">
+      <field name="name">List Employee</field>
+      <field name="res_model">hr.employee</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="employee_view_tree"/>
+    </record>
+
+    <record id="action_hotel_service_view" model="ir.actions.act_window">
+      <field name="name">Hotel Service</field>
+      <field name="res_model">product.template</field>
+      <field name="view_mode">tree,form</field>   
+      <field name="context">{'search_default_hotel_service': 1, 'default_detailed_type': 'service'}</field>
+    </record>
+
+    <record id="action_hotel_service_view_tree" model="ir.actions.act_window.view">
+        <field name="view_mode">tree</field>
+        <field name="sequence">1</field>
+        <field name="view_id" ref="hotel_service_view_tree"/>
+        <field name="act_window_id" ref="action_hotel_service_view"/>
+    </record>
+
+    <record id="action_hotel_service_view_form" model="ir.actions.act_window.view">
+        <field name="view_mode">form</field>
+        <field name="sequence">2</field>
+        <field name="view_id" ref="hotel_service_view_form"/>
+        <field name="act_window_id" ref="action_hotel_service_view"/>
+    </record>
+
+    <!-- server action to the one above -->
+
+    <record id="action_set_booked" model="ir.actions.server">
+        <field name="name">Set Booked</field>
+        <field name="model_id" ref="model_booking"/>
+        <field name="binding_model_id" ref="model_booking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            record.action_set_booked()
+        </field>
+    </record>
+
+    <!-- Top menu item -->
+
+    <menuitem name="Hotel Management" id="hotel_management_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Hotels" id="menu_open_hotel_view" parent="hotel_management_root" sequence='1'/>
+    <menuitem name="Booking" id="menu_open_booking_view_tree" parent="hotel_management_root" sequence='2'/>
+    
+    <menuitem name="Hotels" id="menu_open_hotel_view_tree" parent="menu_open_hotel_view" action="action_hotel_view_tree"/>
+    <menuitem name="Rooms" id="menu_open_room_view_tree" parent="menu_open_hotel_view" action="action_room_view_tree"/>
+    <menuitem name="Service" id="menu_open_service_view_tree" parent="menu_open_hotel_view" action="action_hotel_service_view"/>
+    <menuitem name="Employee" id="menu_open_employee_view_tree" parent="menu_open_hotel_view" action="action_employee_view_tree"/>
+    
+    <menuitem name="All Booking" id="menu_open_all_booking_view_tree" parent="menu_open_booking_view_tree" action="action_booking_view_tree" sequence='1'/>
+    <menuitem name="New Booking" id="menu_open_new_booking_view_tree" parent="menu_open_booking_view_tree" action="action_new_booking_view_tree" sequence='2'/>
+    <!-- actions -->
+    <!-- <menuitem name="List" id="menu_open_hotel_view_tree_1" parent="menu_open_hotel_view_tree"
+              action="action_hotel_view_tree"/> -->
+    <!-- <menuitem name="Server to list" id="hotel_management" parent="hotel_management.menu_2"
+              action="hotel_management.action_server"/> -->
+
+  </data>
+</odoo>
