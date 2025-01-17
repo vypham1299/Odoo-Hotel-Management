@@ -78,7 +78,7 @@
       <field name="arch" type="xml">
         <tree>
           <field name="booking_id"/>
-          <field name="customer"/>
+          <field name="customer_id"/>
           <field name="check_in"/>
           <field name="check_out"/>
           <field name="is_booked"/>
@@ -96,7 +96,7 @@
           <group>
             <group>
               <field name="booking_id"/>
-              <field name="customer"/>
+              <field name="customer_id"/>
               <field name="hotel_id"/>
               <field name="bed_type"/>
             </group>
@@ -161,7 +161,7 @@
       <field name="arch" type="xml">
         <tree string="List New Booking">
           <field name="booking_id"/>
-          <field name="customer"/>
+          <field name="customer_id"/>
           <field name="check_in"/>
           <field name="check_out"/>
           <field name="create_uid"/>

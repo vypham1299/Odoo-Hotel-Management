@@ -7,6 +7,10 @@ class Sale_Order_Hotel(models.Model):
 
     booking_id = fields.Many2one('booking', string='Booking')
 
+    @api.onchange('booking_id')
+    def _onchange_booking_id(self):
+        self.partner_id = self.booking_id.customer_id
+
     # @api.onchange('booking_id')
     # def _onchange_booking_id(self):
     #     if self.booking_id:

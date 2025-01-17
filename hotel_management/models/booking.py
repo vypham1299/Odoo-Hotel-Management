@@ -9,7 +9,6 @@ class Booking(models.Model):
     ]
 
     booking_id = fields.Char(string='Order Number', required=True)
-    customer = fields.Char(string='Customer Name', required=True)
     date = fields.Datetime(required=True, default=fields.Datetime.now)
     check_in = fields.Datetime(string='Check-In', required=True)
     check_out = fields.Datetime(string='Check-Out', required=True)
@@ -22,6 +21,7 @@ class Booking(models.Model):
 
     hotel_address = fields.Text()
 
+    customer_id = fields.Many2one('res.partner', string='Customer', required=True)
     hotel_id = fields.Many2one('hotel', string='Hotel', required=True)
     bed_type = fields.Selection(
         [('single', 'Single'), ('double', 'Double')],
@@ -43,7 +43,7 @@ class Booking(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            name = f"{record.room_id} - {record.customer}"
+            name = f"{record.room_id.room_id} - {record.customer_id.name}"
             result.append((record.id, name))
         return result
     
